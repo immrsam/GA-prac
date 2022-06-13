@@ -112,13 +112,23 @@ const arrOfBooks = [
     }
 ];
 
-console.log(arrOfBooks);
+// console.log(arrOfBooks);
+
+for(let i = 0; i < arrOfBooks.length; i++){
+    if(arrOfBooks[i].alreadyRead){
+        console.log(`You have read "${arrOfBooks[i].title}" by ${arrOfBooks[i].author}`);
+    } else {
+        console.log(`You still need to read "${arrOfBooks[i].title}" by ${arrOfBooks[i].author}`);
+    }
+}
 
 arrOfBooks.forEach((e) => {
     if(e.alreadyRead){
-        console.log(e);
+        console.log(`You have read "${e.title}" by ${e.author}`);
+    } else {
+        console.log(`You still need to read "${e.title}" by ${e.author}`);
     }
-})
+});
 
 const gingerAppleBananaSmoothie = {
     title: "Ginger, Apple and Banana Smoothie",
@@ -137,7 +147,12 @@ const gingerAppleBananaSmoothie = {
     ]
 }
 
-console.log(gingerAppleBananaSmoothie);
+console.log(gingerAppleBananaSmoothie.title);
+console.log(`Serves: ${gingerAppleBananaSmoothie.serves}`);
+console.log(`Ingredients:`);
+gingerAppleBananaSmoothie.ingredients.forEach((e) => console.log(`- ${e}`))
+
+
 
 const container = document.getElementById('container');
 
