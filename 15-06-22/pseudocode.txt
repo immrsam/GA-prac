@@ -1,0 +1,34 @@
+START new series
+    SET playerOne wins as 0
+    SET playerTwo wins as 0
+START new game
+STORE playerOne choice
+STORE playerTwo choice
+
+CHECK player choice against each other
+    
+    IF playerOne choice is equal to playerTwo
+        RETURN draw
+    
+    IF playerOne choice is paper
+        IF playerTwo is rock
+            ADD win to playerOne
+        IF playerTwo is scissors
+            ADD win to playerTwo
+    
+    IF playerOne choice is rock
+        IF playerTwo is scissors
+            ADD win to playerOne
+        IF playerTwo is paper
+            ADD win to playerTwo
+    
+    IF playerOne choice is scissors
+        IF playerTwo is paper
+            ADD win to playerOne
+        IF playerTwo is rock
+            ADD win to playerTwo
+
+IF playerOne wins and playerTwo wins are less than 2
+    START new game
+ELSE
+    DECLARE winner
