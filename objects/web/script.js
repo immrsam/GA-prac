@@ -51,6 +51,7 @@ const addPerson = (objectArr, fName, lName, newId) => {
 addPerson(people, "Sam", "Bradbury", 3434);
 addPerson(people, "This", "Guy", 3214);
 addPerson(people, "Bud", "Smith", 6678);
+
 addPerson("people", 111, 222, "6678");
 addPerson(people, 111, 222, "6678");
 addPerson(people, "111", 222, "6678");
