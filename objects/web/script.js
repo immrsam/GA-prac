@@ -3,7 +3,7 @@ const container = document.getElementById("container");
 const people = [];
 
 const addPerson = (objectArr, fName, lName, userId, isAdmin = false) => {
-    
+
     if(typeof objectArr !== 'object'){
         console.log("Not an object");
         return false;
@@ -26,7 +26,7 @@ const addPerson = (objectArr, fName, lName, userId, isAdmin = false) => {
     }
 
     console.log(`Attempting to add ${fName} ${lName} ${userId}`);
-    
+
     if(!isIdAvailable(objectArr, userId)){
         console.log(`${userId} already exists`);
         return false;
@@ -38,7 +38,7 @@ const addPerson = (objectArr, fName, lName, userId, isAdmin = false) => {
             lastName : lName,
             id       : userId,
             admin    : isAdmin,
-            fullName : function() {
+            listDetails : function() {
                 return this.id + " " + this.firstName + " " + this.lastName + " Admin: " + this.admin;
             }
         }
@@ -47,7 +47,7 @@ const addPerson = (objectArr, fName, lName, userId, isAdmin = false) => {
     }catch(e){
         console.log(e);
     }
-    
+
     return true;
 }
 
@@ -67,5 +67,5 @@ addPerson(people, "Bud", "Smith", 6678);
 addPerson(people, "Nobby", "Blinky", 6678);
 
 people.forEach(p => {
-    console.log(p.fullName());
+    console.log(p.listDetails());
 });
