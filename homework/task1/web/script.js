@@ -69,7 +69,9 @@ const trainLines = {
 const travelFromLine = function(startLine, startStation, endLine, endStation){
     let tripDetails = {
         message: "",
+        // changeOverMessage: "",
         tripMap: "",
+        numberStops: 0,
         displayTrip: function(){
             return `${this.message}\n${this.tripMap}`;
         }
@@ -111,7 +113,15 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
         return tripDetails = travelFrom(startStation, endStation);
     }
 
+    tripDetails.correctDetails = true;
+    tripDetails.stationOne = trainLines[startLine][startIndex];
+    tripDetails.lineStart = startLine;
+    tripDetails.stationTwo = trainLines[endLine][endIndex];
+    tripDetails.lineEnd = endLine;
+    tripDetails.lineNumberStops = [];
+
     tripDetails.changeOver = [];
+
 
     // check if shares connecting stations lines connect to endStation
     const commonStations = trainLines[startLine].filter(value => trainLines[endLine].includes(value));
@@ -120,22 +130,62 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
         let nextConnection = function(){
             for(let i = startIndex; i > 0; i--){
                 if(commonStations.includes(trainLines[startLine][i])){
-                    // console.log(trainLines[startLine][i]);
+                    let stopsToChangeOver = i - startIndex;
+                    if(startIndex > i){
+                        stopsToChangeOver = startIndex - i;
+                    }
+                    // console.log(`Stops to ${trainLines[startLine][i]} is ${stopsToChangeOver}`);
+
+                    tripDetails.lineNumberStops.push(stopsToChangeOver);
+
+                    for(let n = startIndex; n > startIndex - stopsToChangeOver; n--){
+                        tripDetails.tripMap += `- ${trainLines[startLine][n]}\n`;
+                    }
+
+                    tripDetails.tripMap += `- ${trainLines[startLine][i]} - change from line ${startLine} to line ${endLine}`;
+
+                    let connectionStartIndex = trainLines[endLine].indexOf(trainLines[startLine][i]);
+
+                    let stopsAfterChangeOver = 0;
+
+                    if(endIndex > connectionStartIndex){
+                        stopsAfterChangeOver = endIndex - connectionStartIndex;
+                        for(let n = connectionStartIndex; n <= endIndex; n++){
+                            tripDetails.tripMap += `- ${trainLines[endLine][n]}\n`;
+                        }
+                    }else{
+                        stopsAfterChangeOver = connectionStartIndex - endIndex - 1;
+                        for(let n = connectionStartIndex; n >= endIndex; n--){
+                            tripDetails.tripMap += `- ${trainLines[endLine][n]}\n`;
+                        }
+                    }
+
+                    tripDetails.lineNumberStops.push(stopsAfterChangeOver);
+
                     return trainLines[startLine][i];
                 }
             }
             return null;
         }
 
+
         tripDetails.changeOver.push(nextConnection());
-        console.log(tripDetails);
+        // console.log(tripDetails);
 
     } else{
         // if not, check if connection stations have connection stations that connect to endStation(loop)
         console.log("Broken tracks");
     }
 
+    tripDetails.numberStops = tripDetails.lineNumberStops[0] + tripDetails.lineNumberStops[1];
+
+    // generate output message
+    tripDetails.message = `To go from ${tripDetails.stationOne} to ${tripDetails.stationTwo} will take ${tripDetails.numberStops} stops`;
+
     return tripDetails;
 }
 
-console.log(travelFromLine("t2", "Ashfield", "t3", "Marrickville").displayTrip());
+console.log(travelFromLine("t2", "Stanmore", "t3", "Canterbury").displayTrip());
+console.log(travelFromLine("t2", "Stanmore", "t3", "Wynyard").displayTrip());
+console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
+console.log(travelFromLine("t1", "Parramatta", "t3", "belmore").displayTrip());
