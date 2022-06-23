@@ -55,9 +55,9 @@ const travelFrom = function(start, end){
     return tripDetails;
 }
 
-console.log(travelFrom("St. James", "Redfern").displayTrip());
-console.log(travelFrom("Newtown", "Museum").displayTrip());
-console.log(travelFrom("bbb", "aaa").displayTrip());
+// console.log(travelFrom("St. James", "Redfern").displayTrip());
+// console.log(travelFrom("Newtown", "Museum").displayTrip());
+// console.log(travelFrom("bbb", "aaa").displayTrip());
 
 // Bonus
 const trainLines = {
@@ -142,9 +142,9 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
                         tripDetails.tripMap += `- ${trainLines[startLine][n]}\n`;
                     }
 
-                    tripDetails.tripMap += `- ${trainLines[startLine][i]} - change from line ${startLine} to line ${endLine}`;
+                    tripDetails.tripMap += `- ${trainLines[startLine][i]} - change from line ${startLine} to line ${endLine}\n`;
 
-                    let connectionStartIndex = trainLines[endLine].indexOf(trainLines[startLine][i]);
+                    let connectionStartIndex = trainLines[endLine].indexOf(trainLines[startLine][i]) -1;
 
                     let stopsAfterChangeOver = 0;
 
@@ -152,11 +152,13 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
                         stopsAfterChangeOver = endIndex - connectionStartIndex;
                         for(let n = connectionStartIndex; n <= endIndex; n++){
                             tripDetails.tripMap += `- ${trainLines[endLine][n]}\n`;
+                            // console.log(`n: ${n} endLine: ${endLine} endIndex: ${endIndex}\ntrainLines[${endLine}][${n}] `);
                         }
                     }else{
                         stopsAfterChangeOver = connectionStartIndex - endIndex - 1;
                         for(let n = connectionStartIndex; n >= endIndex; n--){
                             tripDetails.tripMap += `- ${trainLines[endLine][n]}\n`;
+                            // console.log(`n: ${n} endLine: ${endLine} endIndex: ${endIndex}\ntrainLines[${endLine}][${n}] `);
                         }
                     }
 
@@ -188,4 +190,6 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
 console.log(travelFromLine("t2", "Stanmore", "t3", "Canterbury").displayTrip());
 console.log(travelFromLine("t2", "Stanmore", "t3", "Wynyard").displayTrip());
 console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
-console.log(travelFromLine("t1", "Parramatta", "t3", "belmore").displayTrip());
+// console.log(travelFromLine("t1", "Pramatta", "t3", "Belmore").displayTrip());
+// console.log(travelFromLine("t1", "Parramatta", "t3", "elmore").displayTrip());
+console.log(travelFromLine("t1", "Harris Park", "t2", "St. James").displayTrip());
