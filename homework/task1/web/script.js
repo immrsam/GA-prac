@@ -1,9 +1,12 @@
 // const container = document.getElementById("container");
 
 // Step 1 and 2
-const stations = ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown"];
+// const stations = ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown"];
+const t1 = ["Central", "Redfern", "Burwood", "Strathfield", "Lidcombe", "Auburn", "Clyde", "Granville", "Harris Park", "Parramatta"];
+const t2 = ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown", "Stanmore", "Petersham", "Lewisham", "Summer Hill", "Ashfield", "Croydon", "Burwood", "Strathfield"];
+const t3 = ["Town Hall", "Wynyard", "Circular Quay", "St. James", "Museum", "Central", "Redfern", "Erskineville", "St. Peters", "Sydenham", "Marrickville", "Dulwich Hill", "Hurlstone Park", "Canterbury", "Campsie", "Belmore", "Lakemba", "Wiley Park", "Punchbowl", "Bankstown", "Yagoona", "Birrong", "Sefton", "Chester Hill", "Leightonfield", "Villawood", "Carramar", "Cabramatta", "Warrick Farm", "Liverpool", "Regents Park", "Berala", "Lidcombe"];
 
-const travelFrom = function(start, end){
+const travelFrom = function(start, end, line = t2){
     let tripDetails = {
         correctDetails: false,
         stationOne: "",
@@ -16,37 +19,37 @@ const travelFrom = function(start, end){
         }
     };
 
-    const startIndex = stations.findIndex(item => {
+    const startIndex = line.findIndex(item => {
         return item.toLowerCase() === start.toLowerCase();
     });
 
-    if(typeof stations[startIndex] === 'undefined'){
+    if(typeof line[startIndex] === 'undefined'){
         tripDetails.message = `${start} is not a valid station, please try again.`
         return tripDetails;
     }
 
-    const endIndex = stations.findIndex(item => {
+    const endIndex = line.findIndex(item => {
         return item.toLowerCase() === end.toLowerCase();
     });
 
-    if(typeof stations[endIndex] === 'undefined'){
+    if(typeof line[endIndex] === 'undefined'){
         tripDetails.message = `${end} is not a valid station, please try again.`
         return tripDetails;
     }
 
     tripDetails.correctDetails = true;
-    tripDetails.stationOne = stations[startIndex];
-    tripDetails.stationTwo = stations[endIndex];
+    tripDetails.stationOne = line[startIndex];
+    tripDetails.stationTwo = line[endIndex];
 
     if(endIndex > startIndex){
         tripDetails.numberStops = endIndex - startIndex - 1;
         for(let i = startIndex; i <= endIndex; i++){
-            tripDetails.tripMap += `- ${stations[i]}\n`;
+            tripDetails.tripMap += `- ${line[i]}\n`;
         }
     }else{
         tripDetails.numberStops = startIndex - endIndex - 1;
         for(let i = startIndex; i >= endIndex; i--){
-            tripDetails.tripMap += `- ${stations[i]}\n`;
+            tripDetails.tripMap += `- ${line[i]}\n`;
         }
     }
 
@@ -55,7 +58,7 @@ const travelFrom = function(start, end){
     return tripDetails;
 }
 
-// console.log(travelFrom("St. James", "Redfern").displayTrip());
+console.log(travelFrom("St. James", "Redfern").displayTrip());
 // console.log(travelFrom("Newtown", "Museum").displayTrip());
 // console.log(travelFrom("bbb", "aaa").displayTrip());
 
@@ -110,7 +113,11 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
 
     // check if the same line, already did that function ^^
     if(startLine === endLine){
-        return tripDetails = travelFrom(startStation, endStation);
+        return tripDetails = travelFrom(startStation, endStation, endLine);
+    } else if(trainLines[endLine].includes(startStation) && trainLines[endLine].includes(endStation)){
+        return tripDetails = travelFrom(startStation, endStation, trainLines[endLine]);
+    } else if(trainLines[startLine].includes(startStation) && trainLines[startLine].includes(endStation)){
+        return tripDetails = travelFrom(startStation, endStation, trainLines[startLine]);
     }
 
     tripDetails.correctDetails = true;
@@ -187,9 +194,16 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
     return tripDetails;
 }
 
-console.log(travelFromLine("t2", "Stanmore", "t3", "Canterbury").displayTrip());
-console.log(travelFromLine("t2", "Stanmore", "t3", "Wynyard").displayTrip());
-console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
+
+//t1: ["Central", "Redfern", "Burwood", "Strathfield", "Lidcombe", "Auburn", "Clyde", "Granville", "Harris Park", "Parramatta"],
+//t2: ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown", "Stanmore", "Petersham", "Lewisham", "Summer Hill", "Ashfield", "Croydon", "Burwood", "Strathfield"],
+//t3: ["Town Hall", "Wynyard", "Circular Quay", "St. James", "Museum", "Central", "Redfern", "Erskineville", "St. Peters", "Sydenham", "Marrickville", "Dulwich Hill", "Hurlstone Park", "Canterbury", "Campsie", "Belmore", "Lakemba", "Wiley Park", "Punchbowl", "Bankstown", "Yagoona", "Birrong", "Sefton", "Chester Hill", "Leightonfield", "Villawood", "Carramar", "Cabramatta", "Warrick Farm", "Liverpool", "Regents Park", "Berala", "Lidcombe"]
+
+// console.log(travelFromLine("t2", "Stanmore", "t3", "Canterbury").displayTrip());
+// console.log(travelFromLine("t2", "Stanmore", "t3", "Wynyard").displayTrip());
+// console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
 // console.log(travelFromLine("t1", "Pramatta", "t3", "Belmore").displayTrip());
-// console.log(travelFromLine("t1", "Parramatta", "t3", "elmore").displayTrip());
+console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
 console.log(travelFromLine("t1", "Harris Park", "t2", "St. James").displayTrip());
+console.log(travelFromLine("t1", "Central", "t2", "Circular Quay").displayTrip()); // both on same line
+console.log(travelFromLine("t1", "Parramatta", "t3", "Erskineville").displayTrip()); // one stop away
