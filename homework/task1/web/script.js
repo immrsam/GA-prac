@@ -58,58 +58,74 @@ const travelFrom = function(start, end, line = t2){
     return tripDetails;
 }
 
-console.log(travelFrom("St. James", "Redfern").displayTrip());
-// console.log(travelFrom("Newtown", "Museum").displayTrip());
-// console.log(travelFrom("bbb", "aaa").displayTrip());
+// ****Bonus****
 
-// Bonus
+// all the stations I could be bothered to type in, looked online for a list but nothing that would have made my life easier
 const trainLines = {
     t1: ["Central", "Redfern", "Burwood", "Strathfield", "Lidcombe", "Auburn", "Clyde", "Granville", "Harris Park", "Parramatta"],
     t2: ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown", "Stanmore", "Petersham", "Lewisham", "Summer Hill", "Ashfield", "Croydon", "Burwood", "Strathfield"],
     t3: ["Town Hall", "Wynyard", "Circular Quay", "St. James", "Museum", "Central", "Redfern", "Erskineville", "St. Peters", "Sydenham", "Marrickville", "Dulwich Hill", "Hurlstone Park", "Canterbury", "Campsie", "Belmore", "Lakemba", "Wiley Park", "Punchbowl", "Bankstown", "Yagoona", "Birrong", "Sefton", "Chester Hill", "Leightonfield", "Villawood", "Carramar", "Cabramatta", "Warrick Farm", "Liverpool", "Regents Park", "Berala", "Lidcombe"]
 }
 
+// helper funcitons
+const checkLineHasStation = function(line, station, tripDetails){
+    if(line in trainLines){
+        if(trainLines[line].includes(station)){
+            if(tripDetails.startIndex !== -1){
+                tripDetails.endIndex = trainLines[line].findIndex(item => {
+                    return item.toLowerCase() === station.toLowerCase();
+                });
+            } else {
+                tripDetails.startIndex = trainLines[line].findIndex(item => {
+                    return item.toLowerCase() === station.toLowerCase();
+                });
+            }
+
+        }else{
+            tripDetails.message = `${station} is not a valid station, or on a different line. Please try again.`
+            return tripDetails;
+        }
+    }else{
+        tripDetails.message = `${line} is not a valid line. Please try again.`
+        return tripDetails;
+    }
+    return tripDetails;
+}
+
+const getStationList = function(startIndex, tripDetails, line, stops){
+    if(tripDetails.endIndex > startIndex){
+        stops = tripDetails.endIndex - startIndex;
+        for(let n = startIndex; n <= tripDetails.endIndex; n++){
+            tripDetails.tripMap += `- ${trainLines[line][n]}\n`;
+        }
+    }else{
+        stops = startIndex - tripDetails.endIndex - 1;
+        for(let n = startIndex; n >= tripDetails.endIndex; n--){
+            tripDetails.tripMap += `- ${trainLines[line][n]}\n`;
+        }
+    }
+    tripDetails.lineNumberStops.push(stops);
+    return tripDetails;
+}
+
+// main function to call
 const travelFromLine = function(startLine, startStation, endLine, endStation){
     let tripDetails = {
+        correctDetails: false,
         message: "",
-        // changeOverMessage: "",
         tripMap: "",
         numberStops: 0,
+        startIndex: -1,
+        endIndex: -1,
+        lineNumberStops: [],
+        changeOver: [],
         displayTrip: function(){
             return `${this.message}\n${this.tripMap}`;
         }
     };
 
-    let startIndex = -1;
-    let endIndex = -1;
-
-    // check if startLine has startStation
-    for (let l1 in trainLines){
-        if(startLine === l1){
-            startIndex = trainLines[l1].findIndex(item => {
-                return item.toLowerCase() === startStation.toLowerCase();
-            });
-        }
-    }
-
-    if(typeof trainLines[startLine][startIndex] === 'undefined'){
-        tripDetails.message = `${startStation} is not a valid station, or on a different line. Please try again.`
-        return tripDetails;
-    }
-
-    // check if endLine has endStation
-    for (let l2 in trainLines){
-        if(endLine === l2){
-            endIndex = trainLines[l2].findIndex(item => {
-                return item.toLowerCase() === endStation.toLowerCase();
-            });
-        }
-    }
-
-    if(typeof trainLines[endLine][endIndex] === 'undefined'){
-        tripDetails.message = `${endStation} is not a valid station, or on a different line. Please try again.`
-        return tripDetails;
-    }
+    tripDetails = checkLineHasStation(startLine, startStation, tripDetails);
+    tripDetails = checkLineHasStation(endLine, endStation, tripDetails);
 
     // check if the same line, already did that function ^^
     if(startLine === endLine){
@@ -120,69 +136,51 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
         return tripDetails = travelFrom(startStation, endStation, trainLines[startLine]);
     }
 
+    // insert data into tripDetails object
     tripDetails.correctDetails = true;
-    tripDetails.stationOne = trainLines[startLine][startIndex];
+    tripDetails.stationOne = trainLines[startLine][tripDetails.startIndex];
     tripDetails.lineStart = startLine;
-    tripDetails.stationTwo = trainLines[endLine][endIndex];
+    tripDetails.stationTwo = trainLines[endLine][tripDetails.endIndex];
     tripDetails.lineEnd = endLine;
-    tripDetails.lineNumberStops = [];
-
-    tripDetails.changeOver = [];
-
 
     // check if shares connecting stations lines connect to endStation
     const commonStations = trainLines[startLine].filter(value => trainLines[endLine].includes(value));
+
+    // should always be more than zero commonStation, otherwise there is problem
     if(commonStations.length > 0){
         // find next station
         let nextConnection = function(){
-            for(let i = startIndex; i > 0; i--){
+            for(let i = tripDetails.startIndex; i > 0; i--){
+
                 if(commonStations.includes(trainLines[startLine][i])){
-                    let stopsToChangeOver = i - startIndex;
-                    if(startIndex > i){
-                        stopsToChangeOver = startIndex - i;
-                    }
-                    // console.log(`Stops to ${trainLines[startLine][i]} is ${stopsToChangeOver}`);
-
-                    tripDetails.lineNumberStops.push(stopsToChangeOver);
-
-                    for(let n = startIndex; n > startIndex - stopsToChangeOver; n--){
-                        tripDetails.tripMap += `- ${trainLines[startLine][n]}\n`;
-                    }
-
-                    tripDetails.tripMap += `- ${trainLines[startLine][i]} - change from line ${startLine} to line ${endLine}\n`;
-
-                    let connectionStartIndex = trainLines[endLine].indexOf(trainLines[startLine][i]) -1;
-
+                    let stopsToChangeOver = i - tripDetails.startIndex;
                     let stopsAfterChangeOver = 0;
 
-                    if(endIndex > connectionStartIndex){
-                        stopsAfterChangeOver = endIndex - connectionStartIndex;
-                        for(let n = connectionStartIndex; n <= endIndex; n++){
-                            tripDetails.tripMap += `- ${trainLines[endLine][n]}\n`;
-                            // console.log(`n: ${n} endLine: ${endLine} endIndex: ${endIndex}\ntrainLines[${endLine}][${n}] `);
-                        }
-                    }else{
-                        stopsAfterChangeOver = connectionStartIndex - endIndex - 1;
-                        for(let n = connectionStartIndex; n >= endIndex; n--){
-                            tripDetails.tripMap += `- ${trainLines[endLine][n]}\n`;
-                            // console.log(`n: ${n} endLine: ${endLine} endIndex: ${endIndex}\ntrainLines[${endLine}][${n}] `);
-                        }
+                    if(tripDetails.startIndex > i){
+                        stopsToChangeOver = tripDetails.startIndex - i;
                     }
 
-                    tripDetails.lineNumberStops.push(stopsAfterChangeOver);
+                    tripDetails.lineNumberStops.push(stopsToChangeOver);
+                    // list all the stations until the changeover
+                    for(let n = tripDetails.startIndex; n > tripDetails.startIndex - stopsToChangeOver; n--){
+                        tripDetails.tripMap += `- ${trainLines[startLine][n]}\n`;
+                    }
+                    // changeover message
+                    tripDetails.tripMap += `- ${trainLines[startLine][i]} - change from line ${startLine} to line ${endLine}\n`;
+                    // using the changeover stations index from startLine and searching the index of the endLine, we get the new starting index
+                    let connectionStartIndex = trainLines[endLine].indexOf(trainLines[startLine][i]) -1;
+
+                    tripDetails = getStationList(connectionStartIndex, tripDetails, endLine, stopsAfterChangeOver);
 
                     return trainLines[startLine][i];
                 }
             }
             return null;
-        }
-
+        } // end function
 
         tripDetails.changeOver.push(nextConnection());
-        // console.log(tripDetails);
 
     } else{
-        // if not, check if connection stations have connection stations that connect to endStation(loop)
         console.log("Broken tracks");
     }
 
@@ -199,11 +197,6 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
 //t2: ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown", "Stanmore", "Petersham", "Lewisham", "Summer Hill", "Ashfield", "Croydon", "Burwood", "Strathfield"],
 //t3: ["Town Hall", "Wynyard", "Circular Quay", "St. James", "Museum", "Central", "Redfern", "Erskineville", "St. Peters", "Sydenham", "Marrickville", "Dulwich Hill", "Hurlstone Park", "Canterbury", "Campsie", "Belmore", "Lakemba", "Wiley Park", "Punchbowl", "Bankstown", "Yagoona", "Birrong", "Sefton", "Chester Hill", "Leightonfield", "Villawood", "Carramar", "Cabramatta", "Warrick Farm", "Liverpool", "Regents Park", "Berala", "Lidcombe"]
 
-// console.log(travelFromLine("t2", "Stanmore", "t3", "Canterbury").displayTrip());
-// console.log(travelFromLine("t2", "Stanmore", "t3", "Wynyard").displayTrip());
-// console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
-// console.log(travelFromLine("t1", "Pramatta", "t3", "Belmore").displayTrip());
-console.log(travelFromLine("t1", "Parramatta", "t3", "Belmore").displayTrip());
 console.log(travelFromLine("t1", "Harris Park", "t2", "St. James").displayTrip());
-console.log(travelFromLine("t1", "Central", "t2", "Circular Quay").displayTrip()); // both on same line
-console.log(travelFromLine("t1", "Parramatta", "t3", "Erskineville").displayTrip()); // one stop away
+console.log(travelFromLine("t1", "Central", "t2", "Circular Quay").displayTrip());
+console.log(travelFromLine("t1", "Parramatta", "t3", "Erskineville").displayTrip());
