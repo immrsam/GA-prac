@@ -192,11 +192,6 @@ const travelFromLine = function(startLine, startStation, endLine, endStation){
     return tripDetails;
 }
 
-
-//t1: ["Central", "Redfern", "Burwood", "Strathfield", "Lidcombe", "Auburn", "Clyde", "Granville", "Harris Park", "Parramatta"],
-//t2: ["Museum", "St. James", "Circular Quay", "Wynyard", "Townhall", "Central", "Redfern", "Macdonaldtown", "Newtown", "Stanmore", "Petersham", "Lewisham", "Summer Hill", "Ashfield", "Croydon", "Burwood", "Strathfield"],
-//t3: ["Town Hall", "Wynyard", "Circular Quay", "St. James", "Museum", "Central", "Redfern", "Erskineville", "St. Peters", "Sydenham", "Marrickville", "Dulwich Hill", "Hurlstone Park", "Canterbury", "Campsie", "Belmore", "Lakemba", "Wiley Park", "Punchbowl", "Bankstown", "Yagoona", "Birrong", "Sefton", "Chester Hill", "Leightonfield", "Villawood", "Carramar", "Cabramatta", "Warrick Farm", "Liverpool", "Regents Park", "Berala", "Lidcombe"]
-
 console.log(travelFromLine("t1", "Harris Park", "t2", "St. James").displayTrip());
 console.log(travelFromLine("t1", "Central", "t2", "Circular Quay").displayTrip());
 console.log(travelFromLine("t1", "Parramatta", "t3", "Erskineville").displayTrip());
