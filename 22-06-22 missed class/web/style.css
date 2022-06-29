@@ -6,8 +6,6 @@
 }
 
 #container{
-    display: flex;
-    justify-content: center;
     width: 80%;
     min-height: 100vh;
     margin: auto;
@@ -15,10 +13,9 @@
 }
 
 h1{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
+    text-align: center;
+    margin: auto;
+    padding: 20px;
     width: 100%;
     background-color: rgba(101, 177, 177, 1);
 }

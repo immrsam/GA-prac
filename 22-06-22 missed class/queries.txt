@@ -1,0 +1,39 @@
+const num = Math.floor(Math.random() * 5);
+    const logo = document.querySelector(".lnXdpd");
+    logo.srcset = "";
+    switch(num){
+        case 0:
+            logo.src = "https://s.yimg.com/rz/p/yahoo_homepage_en-US_s_f_p_bestfit_homepage.png";
+            break;
+        case 1:
+            logo.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Netscape_logo.svg/512px-Netscape_logo.svg.png?20170304152627";
+            break;
+        case 2:
+            logo.src = "https://1.bp.blogspot.com/-mTFv76ceccY/UdRCT_sZZ6I/AAAAAAAAaj8/_DRjs_C4f8Y/s204/AltaVista+logo+1996.png";
+            break;
+        case 3:
+            logo.src = "https://logonoid.com/images/lycos-logo.png";
+            break;
+        case 4:
+            logo.src = "https://static.wikia.nocookie.net/logopedia/images/b/bb/Jeeves_too.jpg/revision/latest?cb=20110511061243";
+            break;
+    }
+
+const title = document.title;
+const logo = document.querySelector(".navi_banner_logo");
+const findCourse = document.querySelector('li[data-track-section="find-your-course"]');
+const learningToday = document.querySelector('h1[data-reactid="17"]');
+
+const courseNames = document.querySelectorAll(".course-name");
+courseNames.forEach(function(item) { console.log(item)})
+
+const campusesWorldwide = document.querySelector('.facts_list_item_quantity[data-reactid="352"]');
+const instructorsWorldwide = document.querySelector('.facts_list_item_quantity[data-reactid="360"]');
+
+const clientsHiring = document.querySelectorAll('div[data-reactid="382"], div[data-reactid="383"], div[data-reactid="384"], div[data-reactid="385"], div[data-reactid="386"]');
+
+console.log();
+
+const qs = document.querySelector(".");
+
+var a = document.querySelector('a[data-a="1"]');

@@ -6,24 +6,16 @@
 }
 
 #container{
-    display: flex;
-    justify-content: center;
     width: 80%;
-    min-height: 80vh;
+    min-height: 100vh;
     margin: auto;
     background-color: rgba(223, 226, 230, 0.8);
 }
 
 h1{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
+    text-align: center;
+    margin: auto;
+    padding: 20px;
     width: 100%;
     background-color: rgba(101, 177, 177, 1);
-}
-
-header{
-    width: 80%;
-    height: 20vh;
 }
