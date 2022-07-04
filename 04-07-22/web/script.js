@@ -1,4 +1,8 @@
-// const container = document.getElementById("container");
-const listNode = document.querySelector("#list");
-const currentStyle = getComputedStyle(listNode);
-const fontSize = currentStyle.fontSize;
+const container = document.getElementById("container");
+const myGA = document.querySelector("#GA");
+
+const sayHello = function(){
+    console.log("Hello GA");
+}
+
+myGA.addEventListener('click', sayHello)
