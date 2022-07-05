@@ -6,16 +6,38 @@
 
 //     - Hint: `setTimeout` or `setInterval` might come in handy here!
 const catImg = document.querySelector("img");
+const heading = document.querySelector("#heading");
 let direction = 1;
 let windowWidth = screen.width;
-catImg.style.left = "0px";
+let catDancing = false;
+let party = false;
+let count = 0;
+let max = 10;
+let speed = 2;
+let posStep = true;
+let skewAmount = 0;
+const maxSkewPos = 20;
+const maxSkewNeg = -20;
 
-var onresize = function() {
-    //your code here
-    //this is just an example
-    width = document.body.clientWidth;
- }
- window.addEventListener("resize", onresize);
+let timer = setInterval(() => {
+    count++;
+    if(count == max){
+        count = 0;
+    }
+    // console.log(count);
+}, max*speed);
+
+catImg.style.left = "0px";
+catImg.style.top = "100px";
+heading.style.width = "100%";
+heading.style.height = "80vh";
+heading.style.textAlign = "center";
+heading.style.padding = "600px 0 0 0";
+heading.style.fontFamily = "Impact,Charcoal,sans-serif";
+heading.style.letterSpacing = "10px";
+heading.style.fontSize = "5em";
+heading.style.opacity = "1";
+heading.style.transform = "skew(0deg, 0deg)";
 
 const catWalk = function(){
     const currentPosAsString = getComputedStyle(catImg).left;
@@ -26,10 +48,43 @@ const catWalk = function(){
         catImg.style.left = "-200px";
     }
     if(currentPos < screen.width){
-        console.log(newPos)
+        // console.log(newPos)
         setTimeout(catWalk, 2);
     }
 
+}
+
+const haveAParty = function(catDancing) {
+    let x = Math.floor(Math.random() * 256);
+    let y = Math.floor(Math.random() * 256);
+    let z = Math.floor(Math.random() * 256);
+    if(catDancing){
+        let bgColor = "rgb(" + x + "," + y + "," + z + ")";
+        heading.style.opacity = "1";
+        if(count == 0){
+            document.body.style.background = bgColor;
+        }
+        if(skewAmount < maxSkewPos && posStep){
+            skewAmount++;
+        }
+        if(skewAmount == maxSkewPos){
+            posStep = false;
+            skewAmount--;
+        }
+        if(skewAmount > maxSkewNeg && !posStep){
+            skewAmount--;
+        }
+        if(skewAmount == maxSkewNeg){
+            posStep = true;
+            skewAmount++;
+        }
+        heading.style.transform = `skew(${skewAmount}deg, ${skewAmount}deg)`;
+
+    }else{
+        heading.style.opacity = "0";
+        let bgColor = "white";
+        document.body.style.background = bgColor;
+    }
 }
 
 const catWalkBack = function(){
@@ -37,8 +92,24 @@ const catWalkBack = function(){
     const currentPos = parseInt(currentPosAsString, 10);
     let newPos = `${currentPos + 10 * direction}px`;
     catImg.style.left = newPos;
-    console.log(direction)
+    // console.log(direction)
     catImg.style.transform = `scaleX(${direction})`;
+
+    if(currentPos > (windowWidth / 2) - 500 && currentPos < (windowWidth / 2) + 200){
+        if(!catDancing){
+            catImg.src = "https://64.media.tumblr.com/171d842459cdda1693a9ca0857ae8886/tumblr_msawcdjgDL1rm7gdlo1_400.gif";
+            catDancing = true;
+        }
+    } else{
+
+        if(catDancing){
+            catImg.src = "http://www.anniemation.com/clip_art/images/cat-walk.gif";
+            catDancing = false;
+
+        }
+    }
+    haveAParty(catDancing);
+
     if(currentPos >= windowWidth - 200){
         direction = -1;
     }
@@ -48,7 +119,6 @@ const catWalkBack = function(){
     if(currentPos < windowWidth){
         setTimeout(catWalkBack, 20);
     }
-
 }
 
 catWalkBack();
