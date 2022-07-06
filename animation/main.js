@@ -103,7 +103,9 @@ const catWalkBack = function(){
     } else{
 
         if(catDancing){
-            catImg.src = "http://www.anniemation.com/clip_art/images/cat-walk.gif";
+            // catImg.src = "http://www.anniemation.com/clip_art/images/cat-walk.gif";
+            catImg.src = "https://www.kasandbox.org/programming-images/misc/cat-walk.gif";
+
             catDancing = false;
 
         }
