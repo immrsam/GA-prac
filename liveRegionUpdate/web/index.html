@@ -13,14 +13,16 @@
             <h1>Live Region Update</h1>
         </header>
         <main>
-            <button id="statusButton">Update Status</button>
             <article>
                 <label for="manualStatusUpdate">Manual Status Update:</label>
                 <span id="manualStatusUpdate" aria-live="assertive">Nothing to display</span>
-            </article>
-            <article>
+                <br/>
                 <label for="autoStatusUpdate">Auto Status Update:</label>
                 <span id="autoStatusUpdate" aria-live="assertive">Nothing to display</span>
+            </article>
+            <article>
+                <button id="statusButton">Update Status</button>
+                <span id="loadStatusAnimation" aria-live="off"></span>
             </article>
         </main>
 
