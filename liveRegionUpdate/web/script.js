@@ -1,7 +1,6 @@
-document.addEventListener("DOMContentLoaded", () =>{
-    // start code here
+// start code here
 
-    const states = [
+const states = [
         "Nothing to display",
         "Starting status update",
         "Status has begun to be updated",
@@ -42,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () =>{
     }
 
     const manualUpdateStatus = function(){
+        manualStateIndex++;
         if(manualStateIndex < states.length){
-            manualStateIndex++;
             statusUpdateDisplay.textContent = states[manualStateIndex];
         }
     }
@@ -86,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () =>{
         autoStatusUpdateDisplay.textContent = states[autoStateIndex];
     }
 
+    document.addEventListener("DOMContentLoaded", () =>{
     resetStatus();
 
     statusUpdateButton.addEventListener("click", updateStatus);
