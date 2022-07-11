@@ -5,10 +5,11 @@ let firstFocusableModalElement = ourModal.querySelector("input#name");
 let lastFocusableModalElement = closeModalButton;
 
 function listenForKeyPress(event) {
+    console.log(event);
     // If they pressed Escape, close the modal
     if(event.key === "Escape") {
         console.log("Escaped");
-        closeModal();
+        return closeModal();
     }
 
     // If they didn't press Tab, do nothing

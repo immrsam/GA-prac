@@ -1,0 +1,18 @@
+html {
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+body {
+    transition: background 0.3s, color 0.3s;
+}
+
+.light-theme {
+    background: #f8f8ff;
+    color: #16161d;
+}
+
+.dark-theme {
+    background: #16161d;
+    color: #f8f8ff;
+}

@@ -1,0 +1,68 @@
+/* Stop the circle from animating with CSS if the user prefers reduced motion! Test this live by changing your "reduced motion" system preferences (you may need to restart your browser).
+
+Also, change the background to "black" if the user prefers a dark color scheme. */
+
+@keyframes change-background {
+    0% {
+        background: #1e80ff;
+    }
+    100% {
+        background: #ff6147;
+    }
+}
+
+@keyframes move-diagonally {
+    0% {
+        left: 0vmin;
+        top: 0vmin;
+    }
+    100% {
+        left: calc(100vw - 30vmin);
+        top: calc(100vh - 30vmin);
+    }
+}
+
+@keyframes scale-up {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.circle {
+    animation: change-background 10s linear alternate infinite,
+    move-diagonally 10s linear alternate infinite,
+    scale-up 10s linear alternate infinite;
+    background: #1e80ff;
+    border-radius: 50%;
+    height: 30vmin;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 30vmin;
+    will-change: transform, top, left, background;
+}
+
+@media (prefers-reduced-motion){
+    .circle{
+        animation: none !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .container {
+    background: black;
+    color: white;
+    }
+    }
+    @media (prefers-color-scheme: light) {
+    .container {
+    background: white;
+    color: black;
+    }
+    }
