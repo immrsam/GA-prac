@@ -1,5 +1,3 @@
-// start code here
-
 const states = [
         "Nothing to display",
         "Starting status update",
@@ -87,9 +85,6 @@ const states = [
 
     document.addEventListener("DOMContentLoaded", () =>{
     resetStatus();
-
     statusUpdateButton.addEventListener("click", updateStatus);
     resetStatusButton.addEventListener("click", resetStatus);
-
-    //end code before here
-})
+});
