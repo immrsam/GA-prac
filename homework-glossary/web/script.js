@@ -1,21 +1,30 @@
 const main = document.querySelector("main");
 const searchButton = document.querySelector("#searchButton");
+const clearButton = document.querySelector("#clearButton");
 const searchBox = document.querySelector("#searchBox");
+const noResult = document.querySelector("#noResult");
 
 const search = function(){
-    let searchResult = searchBox.value;
-    let result = glossary.find(item => item.term.toUpperCase() === searchResult.toUpperCase());
-    if (result != null){
+    let userSearchTerm = searchBox.value;
+    let multiResult = glossary.filter(item => item.term.toUpperCase().includes(userSearchTerm.toUpperCase()));
+
+    if (multiResult.length > 0){
         clearResults();
-        let display = document.createElement("article");
+        let display = document.createElement("section");
         display.setAttribute("class", "result-list");
-        displayResult(0, result, display);
+        noResult.style.opacity = "0";
+        let itemNumber = 0;
+        multiResult.forEach(result => {
+            displayResult(itemNumber, result, display);
+        })
     }else{
         console.log("No result");
+        noResult.style.opacity = "1";
     }
 }
 
 const displayResult = function(number, result, display){
+    let box = document.createElement("article");
     // create elements
     let term = document.createElement("span");
     let classNumber = document.createElement("span");
@@ -50,21 +59,23 @@ const displayResult = function(number, result, display){
         tagsText += `${tag} `;
     });
     tags.textContent = tagsText;
-
-    display.appendChild(termLabel);
-    display.appendChild(term);
-    display.innerHTML += "<br/>";
-    display.appendChild(classNumberLabel);
-    display.appendChild(classNumber);
-    display.innerHTML += "<br/>";
-    display.appendChild(definitionLabel);
-    display.appendChild(definition);
-    display.innerHTML += "<br/>";
-    display.appendChild(tagsLabel);
-    display.appendChild(tags);
-    display.innerHTML += "<br/>";
+    // put in a box
+    box.appendChild(termLabel);
+    box.appendChild(term);
+    box.innerHTML += "<br/>";
+    box.appendChild(classNumberLabel);
+    box.appendChild(classNumber);
+    box.innerHTML += "<br/>";
+    box.appendChild(definitionLabel);
+    box.appendChild(definition);
+    box.innerHTML += "<br/>";
+    box.appendChild(tagsLabel);
+    box.appendChild(tags);
+    box.innerHTML += "<br/>";
+    // put box into display container
+    display.appendChild(box);
+    // put results into main
     main.appendChild(display);
-
 }
 
 const clearResults = function(){
@@ -77,6 +88,7 @@ const clearResults = function(){
 document.addEventListener("DOMContentLoaded", () =>{
 
     searchButton.addEventListener("click", search);
+    clearButton.addEventListener("click", clearResults);
     searchBox.addEventListener("keypress", (e) => {
         if(e.key === "Enter"){
             search();

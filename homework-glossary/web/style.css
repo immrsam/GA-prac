@@ -13,6 +13,13 @@
     background-color: rgba(223, 226, 230, 0.8);
 }
 
+#noResult{
+    color: red;
+    font-size: large;
+    background: rgba(255, 255, 255, 0.637);
+    opacity: 0;
+}
+
 h1{
     text-align: center;
     margin: auto;
