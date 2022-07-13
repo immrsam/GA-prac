@@ -3,6 +3,7 @@ const searchButton = document.querySelector("#searchButton");
 const clearButton = document.querySelector("#clearButton");
 const searchBox = document.querySelector("#searchBox");
 const noResult = document.querySelector("#noResult");
+const classSelect = document.querySelector("#classSelect");
 
 const search = function(){
     let userSearchTerm = searchBox.value;
@@ -15,7 +16,13 @@ const search = function(){
         noResult.style.opacity = "0";
         let itemNumber = 0;
         multiResult.forEach(result => {
-            displayResult(itemNumber, result, display);
+            if(classSelect.selectedIndex > 0){
+                if(classSelect.selectedIndex === result.class){
+                    displayResult(itemNumber, result, display);
+                }
+            }else{
+                displayResult(itemNumber, result, display);
+            }
         })
     }else{
         console.log("No result");
@@ -85,10 +92,31 @@ const clearResults = function(){
     })
 }
 
-document.addEventListener("DOMContentLoaded", () =>{
+const clearButtonClick = function(){
+    classSelect.selectedIndex = 0;
+    clearResults();
+}
 
+const loadDropDown = function(){
+    let option = document.createElement("option");
+    // option.value = `-1`;
+    option.text = `All Classes`;
+    classSelect.add(option);
+
+    for (let i = 1; i < 9; i++){
+        let option = document.createElement("option");
+        // option.value = `${i}`;
+        option.text = `Class ${i}`;
+        classSelect.add(option);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () =>{
+    loadDropDown();
+    search();
     searchButton.addEventListener("click", search);
-    clearButton.addEventListener("click", clearResults);
+    clearButton.addEventListener("click", clearButtonClick);
+    classSelect.addEventListener("change", search);
     searchBox.addEventListener("keypress", (e) => {
         if(e.key === "Enter"){
             search();
