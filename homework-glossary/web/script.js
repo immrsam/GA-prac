@@ -4,6 +4,8 @@ const clearButton = document.querySelector("#clearButton");
 const searchBox = document.querySelector("#searchBox");
 const noResult = document.querySelector("#noResult");
 const classSelect = document.querySelector("#classSelect");
+const tagList = document.querySelector(".tag-list");
+
 
 const search = function(){
     let userSearchTerm = searchBox.value;
@@ -111,9 +113,44 @@ const loadDropDown = function(){
     }
 }
 
+const loadTagList = function(){
+    let tagListCollect = [];
+    glossary.forEach(key => {
+        key.tags.forEach(tag => {
+            if(!tagListCollect.includes(tag)){
+                tagListCollect.push(tag);
+            }
+        })
+    });
+
+    tagListCollect.forEach(tag => {
+        let checkBoxBox = document.createElement('div');
+        checkBoxBox.id = `cbb-${tag}`;
+        checkBoxBox.classList.add(`cbb`);
+
+        let checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.name = `tag-cb`;
+        checkbox.value = `${tag}`;
+        checkbox.id = `cb-${tag}`;
+
+        let checkBoxLabel = document.createElement("label");
+        checkBoxLabel.setAttribute("for", `tag-cb`);
+        checkBoxLabel.textContent = tag;
+
+        checkBoxBox.appendChild(checkbox);
+        checkBoxBox.appendChild(checkBoxLabel);
+
+        tagList.appendChild(checkBoxBox);
+    });
+
+}
+
 document.addEventListener("DOMContentLoaded", () =>{
+    loadTagList();
     loadDropDown();
     search();
+    const checkboxes = document.querySelectorAll("input[type=checkbox][name=tag-cb]");
     searchButton.addEventListener("click", search);
     clearButton.addEventListener("click", clearButtonClick);
     classSelect.addEventListener("change", search);
@@ -122,5 +159,13 @@ document.addEventListener("DOMContentLoaded", () =>{
             search();
         }
     });
+
+    checkboxes.forEach(cb => {
+        console.log(cb);
+
+        cb.addEventListener('change', function(){
+            console.log(this.value);
+        })
+    })
 
 });

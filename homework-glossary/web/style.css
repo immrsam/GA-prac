@@ -8,6 +8,7 @@
 
 #container{
     width: 80%;
+    min-width: 720px;
     min-height: 100vh;
     margin: auto;
     background-color: rgba(223, 226, 230, 0.8);
@@ -34,4 +35,21 @@ article{
     border-radius: 5px;
     margin: 16px auto 16px auto;
     background-color: rgba(80, 80, 80, 0.2);
+}
+
+#tags{
+    display: flex;
+}
+
+.cbb{
+    padding: 0 0 0 5px;
+    float: left;
+}
+
+.tag-label{
+    flex-basis: 5%;
+}
+
+.tag-list{
+    flex-basis: 95%;
 }
