@@ -8,25 +8,48 @@ const tagList = document.querySelector(".tag-list");
 let checkedList = [];
 
 const search = function(){
+    clearResults();
     let userSearchTerm = searchBox.value;
     let multiResult = glossary.filter(item => item.term.toUpperCase().includes(userSearchTerm.toUpperCase()));
 
-    if(userSearchTerm.length === 0){
+    let hasCheckedItem = Boolean(checkedList.length);
+    let hasClassSelected = Boolean(classSelect.selectedIndex);
+    let checkedItemList = [];
+    checkedList.forEach(cb => {
+        checkedItemList.push(cb.value)
+    });
+
+    console.log(checkedItemList);
+    // if user searches with no input,
+    // dont want to fill screen with all entries
+    if(userSearchTerm.length === 0 && classSelect.selectedIndex === 0 && !hasCheckedItem){
         noResult.textContent = "EMPTY";
-        noResult.style.opacity = "1";
-    }else{
+        // noResult.style.opacity = "1";
+    }
+    else{
         if (multiResult.length > 0){
-            clearResults();
             let display = document.createElement("section");
             display.setAttribute("class", "result-list");
             noResult.style.opacity = "0";
             let itemNumber = 0;
+
             multiResult.forEach(result => {
-                if(classSelect.selectedIndex > 0){
+                if(hasClassSelected && !hasCheckedItem){
+                    console.log("has class and no checked items");
                     if(classSelect.selectedIndex === result.class){
                         displayResult(itemNumber, result, display);
                     }
-                }else{
+                }else if(hasClassSelected && hasCheckedItem){
+                    console.log("has class and checked items");
+                    if(classSelect.selectedIndex === result.class){
+                        compareTagsAndDisplay(itemNumber, result, checkedItemList, display);
+                    }
+                }else if(!hasClassSelected && hasCheckedItem){
+                    console.log("No Class, checked items");
+                    compareTagsAndDisplay(itemNumber, result, checkedItemList, display);
+                }
+                else{
+                    console.log("no class and no checked items");
                     displayResult(itemNumber, result, display);
                 }
             })
@@ -34,6 +57,13 @@ const search = function(){
             noResult.textContent = "NO RESULT";
             noResult.style.opacity = "1";
         }
+    }
+}
+
+const compareTagsAndDisplay = function(itemNumber, result, checkedItemList, display){
+    let sharedTags = checkedItemList.filter(element => result.tags.includes(element));
+    if(sharedTags.length > 0){
+        displayResult(itemNumber, result, display);
     }
 }
 
@@ -94,7 +124,7 @@ const displayResult = function(number, result, display){
 
 const clearResults = function(){
     let allResults = document.querySelectorAll(".result-list");
-    noResult.style.opacity = "0"
+    noResult.style.opacity = "0";
     allResults.forEach(item => {
         item.remove();
     })
@@ -103,6 +133,7 @@ const clearResults = function(){
 const clearButtonClick = function(cbList){
     classSelect.selectedIndex = 0;
     searchBox.value = "";
+    checkedList = [];
     checkboxClear(cbList);
     clearResults();
 }
@@ -185,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () =>{
                 checkedList.splice(index, 1);
                 console.log(`${this.value} was removed`);
             }
+            search();
         })
     })
 
