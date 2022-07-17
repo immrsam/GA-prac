@@ -5,30 +5,35 @@ const searchBox = document.querySelector("#searchBox");
 const noResult = document.querySelector("#noResult");
 const classSelect = document.querySelector("#classSelect");
 const tagList = document.querySelector(".tag-list");
-
+let checkedList = [];
 
 const search = function(){
     let userSearchTerm = searchBox.value;
     let multiResult = glossary.filter(item => item.term.toUpperCase().includes(userSearchTerm.toUpperCase()));
 
-    if (multiResult.length > 0){
-        clearResults();
-        let display = document.createElement("section");
-        display.setAttribute("class", "result-list");
-        noResult.style.opacity = "0";
-        let itemNumber = 0;
-        multiResult.forEach(result => {
-            if(classSelect.selectedIndex > 0){
-                if(classSelect.selectedIndex === result.class){
+    if(userSearchTerm.length === 0){
+        noResult.textContent = "EMPTY";
+        noResult.style.opacity = "1";
+    }else{
+        if (multiResult.length > 0){
+            clearResults();
+            let display = document.createElement("section");
+            display.setAttribute("class", "result-list");
+            noResult.style.opacity = "0";
+            let itemNumber = 0;
+            multiResult.forEach(result => {
+                if(classSelect.selectedIndex > 0){
+                    if(classSelect.selectedIndex === result.class){
+                        displayResult(itemNumber, result, display);
+                    }
+                }else{
                     displayResult(itemNumber, result, display);
                 }
-            }else{
-                displayResult(itemNumber, result, display);
-            }
-        })
-    }else{
-        console.log("No result");
-        noResult.style.opacity = "1";
+            })
+        }else{
+            noResult.textContent = "NO RESULT";
+            noResult.style.opacity = "1";
+        }
     }
 }
 
@@ -89,25 +94,26 @@ const displayResult = function(number, result, display){
 
 const clearResults = function(){
     let allResults = document.querySelectorAll(".result-list");
+    noResult.style.opacity = "0"
     allResults.forEach(item => {
         item.remove();
     })
 }
 
-const clearButtonClick = function(){
+const clearButtonClick = function(cbList){
     classSelect.selectedIndex = 0;
+    searchBox.value = "";
+    checkboxClear(cbList);
     clearResults();
 }
 
 const loadDropDown = function(){
     let option = document.createElement("option");
-    // option.value = `-1`;
     option.text = `All Classes`;
     classSelect.add(option);
 
     for (let i = 1; i < 9; i++){
         let option = document.createElement("option");
-        // option.value = `${i}`;
         option.text = `Class ${i}`;
         classSelect.add(option);
     }
@@ -146,13 +152,21 @@ const loadTagList = function(){
 
 }
 
+const checkboxClear = function(cbList){
+    cbList.forEach(cb => {
+        cb.checked = false;
+    })
+}
+
 document.addEventListener("DOMContentLoaded", () =>{
     loadTagList();
     loadDropDown();
     search();
+
     const checkboxes = document.querySelectorAll("input[type=checkbox][name=tag-cb]");
+
     searchButton.addEventListener("click", search);
-    clearButton.addEventListener("click", clearButtonClick);
+    clearButton.addEventListener("click", function(){clearButtonClick(checkboxes);});
     classSelect.addEventListener("change", search);
     searchBox.addEventListener("keypress", (e) => {
         if(e.key === "Enter"){
@@ -161,11 +175,19 @@ document.addEventListener("DOMContentLoaded", () =>{
     });
 
     checkboxes.forEach(cb => {
-        console.log(cb);
 
         cb.addEventListener('change', function(){
-            console.log(this.value);
+            if(this.checked){
+                checkedList.push(this);
+                console.log(`${this.value} was added`);
+            }else{
+                let index = checkedList.indexOf(this);
+                checkedList.splice(index, 1);
+                console.log(`${this.value} was removed`);
+            }
         })
     })
+
+    clearResults();
 
 });
