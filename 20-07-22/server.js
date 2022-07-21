@@ -18,9 +18,12 @@ const books = JSON.stringify([
     {title: "Heading 2", author: "Author 2", year: 1999}
 ]);
 
+const convertedBooks = JSON.parse(books);
+
 const requestListenerJSON = (req, res) => {
-    res.statusCode = 400;
+    res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
+    console.log(convertedBooks);
     res.end(books);
 }
 
