@@ -35,19 +35,30 @@ const requestListenerJSON = (req, res) => {
 
 const requestListenerRouting = (req, res) => {
 
-    res.setHeader('Content-Type', 'application/json');
     switch(req.url){
+        case "/home":
+            res.statusCode = 200;
+            res.setHeader('content-Type', 'text/html');
+            res.end(`
+            <h1>Authors and Books</h1>
+            <a href="/authors">Authors</a>
+            <a href="/books">Books</a>
+            `);
+            break;
         case "/books":
             res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
             res.end(books);
             break;
-        case "/author":
+        case "/authors":
             res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
             res.end(authors);
             break;
         default:
             res.statusCode = 404;
-            res.end(JSON.stringify({error: "Incorrect result"}));
+            res.setHeader('content-Type', 'text/html');
+            res.end('<h1>404 - no page</h1>');
     }
 
 }
