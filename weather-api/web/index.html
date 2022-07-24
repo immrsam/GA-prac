@@ -9,15 +9,28 @@
 </head>
 <body>
     <div id="container">
-        <h1>Weather API</h1>
-        <section id="weather-box">
-            <div class="left-justify">
-                <span id="weather-heading">Today:</span>
-            </div>
-            <div class="left-justify">
-                <span id="weather-display">33</span>
-            </div>
-        </section>
+        <!-- <h1>Weather API</h1> -->
+        <div id="content-holder">
+
+            <section class="box" id="weather-box">
+                <div class="left-justify">
+                    <span class="box-heading">Today:</span>
+                </div>
+                <div class="left-justify">
+                    <span id="weather-display">-</span>
+                </div>
+            </section>
+            <section class="box" id="Loaction-details">
+                <div class="left-justify">
+                    <p id="current-location" class="box-heading">-</p>
+                    <p id="current-conditon">-</p>
+                </div>
+                <div class="left-justify">
+                    <img id="weather-icon" src="http://openweathermap.org/img/wn/01d@2x.png" alt="icon">
+                </div>
+            </section>
+        </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>

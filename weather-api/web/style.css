@@ -1,0 +1,99 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+#container{
+    width: 80%;
+    max-width: 1400px;
+    min-width: 800px;
+    min-height: 100vh;
+    margin: auto;
+    /* background-color: rgba(223, 226, 230, 0.8); */
+    background: url(images/subtle_bg.jpg);
+    background-size: cover;
+
+}
+
+#content-holder{
+    display: flex;
+}
+
+#content-holder section:nth-of-type(1){
+    flex-grow: 1;
+}
+
+#content-holder section:nth-of-type(2){
+    flex-grow: 7;
+}
+
+#Loaction-details{
+    /* position: relative; */
+}
+
+#weather-box{
+    min-width: 280px;
+}
+
+.box:before {
+    content: "";
+    position: absolute;
+    background: inherit;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 2000px rgba(109, 151, 151, 0.5);
+    filter: blur(10px);
+    margin: -20px;
+}
+
+.box{
+    min-height: 150px;
+    border: 1px solid black;
+    margin: 15px;
+    padding: 5px;
+    /* background-color: rgba(195, 206, 207, 0.2); */
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    position: relative;
+    z-index: 1;
+    background: inherit;
+    overflow: hidden;
+}
+
+
+.box-heading{
+    font-size: 2em;
+}
+
+#weather-display{
+    font-size: 5em;
+    margin: 5px;
+    position: absolute;
+}
+
+#weather-icon{
+
+    width: auto;
+    height: 100%;
+}
+
+.left-justify{
+    /* min-width: 33%; */
+    height: 100%;
+    float: left;
+    margin: 5px 0px 0px 0px;
+    /* background-color: aliceblue; */
+}
+
+h1{
+    text-align: center;
+    margin: auto;
+    padding: 20px;
+    width: 100%;
+    background-color: rgba(101, 177, 177, 1);
+}
