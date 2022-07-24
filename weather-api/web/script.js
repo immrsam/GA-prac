@@ -1,7 +1,6 @@
 const http = require('http');
-
-const port = 2901;
-
+const fs = require('fs');
+const port = 3001;
 let responseJSON;
 let responseDATA;
 
@@ -40,14 +39,97 @@ const requestListenerHTML = (req, res) => {
   res.end(`
   <h1>${responseDATA.name} - ${responseDATA.weather[0].description}</h1>
   <h1>Temp: ${responseDATA.main.temp}</h1>
-
-
   `)
 }
 
 
+const requestListenerLoadHtml = (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/html'
+  });
+
+  let temp = parseInt(responseDATA.main.temp);
+
+  let html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weather API</title>
+        <style>
+          *{
+              margin: 0;
+              padding: 0;
+              font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+              box-sizing: border-box;
+          }
+
+          #container{
+              width: 80%;
+              min-width: 800px;
+              min-height: 100vh;
+              margin: auto;
+              background-color: rgba(223, 226, 230, 0.8);
+          }
+
+          #weather-box{
+              width: 300px;
+              min-height: 150px;
+              border: 1px solid black;
+              margin: 15px;
+          }
+
+          #weather-heading{
+              font-size: 2em;
+
+          }
+
+          #weather-display{
+              font-size: 8em;
+              text-align: center;
+          }
+
+          .left-justify{
+              min-width: 33%;
+              height: 100%;
+              float: left;
+              /* background-color: aliceblue; */
+          }
+
+          h1{
+              text-align: center;
+              margin: auto;
+              padding: 20px;
+              width: 100%;
+              background-color: rgba(101, 177, 177, 1);
+          }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <h1>Weather API</h1>
+            <h2>${responseDATA.name} - ${responseDATA.weather[0].description}</h2>
+            <section id="weather-box">
+                <div class="left-justify">
+                    <span id="weather-heading">Today:</span>
+                </div>
+                <div class="left-justify">
+                    <span id="weather-display">${temp}</span>
+                </div>
+            </section>
+        </div>
+    </body>
+    </html>
+    `;
+
+  res.end(html);
+}
+
+
 // const server = http.createServer(requestListenerJSON);
-const server = http.createServer(requestListenerHTML);
+const server = http.createServer(requestListenerLoadHtml);
 
 server.listen(port, () => {
   console.log(`Server running at port ${port}`)
