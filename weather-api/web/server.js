@@ -45,6 +45,7 @@ function generateHTML(data) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Weather API</title>
 
+
         </head>
         <body>
             <div id="container">
