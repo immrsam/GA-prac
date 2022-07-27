@@ -1,7 +1,7 @@
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 600px;
+    /* width: 600px; */
   }
 
   td, th {
@@ -13,3 +13,26 @@ table {
   tr:nth-child(even) {
     background-color: rgb(219, 219, 219);
   }
+
+.box{
+  padding: 10px;
+  margin: 10px;
+  border: 1px black solid;
+}
+
+#app{
+  display: flex;
+  width: 80%;
+  margin: auto;
+  background-color: whitesmoke;
+}
+
+#standings{
+  float: left;
+  width: 40%;
+}
+
+#team-info{
+  float: left;
+  width: 60%;
+}
