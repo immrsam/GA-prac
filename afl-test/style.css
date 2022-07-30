@@ -20,9 +20,33 @@ table {
   border: 1px black solid;
 }
 
+.live-game{
+  border: 1px black solid;
+  margin: 5px;
+  padding: 2px;
+  min-width: 150px;
+
+
+}
+
+.live-score-right{
+  float: right;
+}
+
+#live-scores{
+  display: flex;
+  height: 100px;
+  width: 80%;
+  min-width: 970px;
+  max-width: 2000px;
+  margin: auto;
+}
+
 #app{
   display: flex;
   width: 80%;
+  min-width: 970px;
+  max-width: 2000px;
   margin: auto;
   background-color: whitesmoke;
 }

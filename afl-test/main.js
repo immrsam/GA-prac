@@ -1,12 +1,13 @@
 const targetElement = document.querySelector("#app");
 const standingsElement = document.querySelector("#standings");
 const teamInfoElement = document.querySelector("#team-info");
+const liveGamesElement = document.querySelector("#live-scores");
 
 // 1. Base URL (+ Path)
 const baseUrl = "https://api.squiggle.com.au";
 const pathStandings = "/?q=standings";
 const pathTeam = "?q=teams;team=12";
-const endpoint = baseUrl + pathStandings;
+const liveGames = "?q=games;live=1";
 
 // 2. Method (None - GET)
 // 3. Query String / Parameters (None)
@@ -30,6 +31,11 @@ const buildPage = (route, data) => {
         case "team":
             teamInfoElement.append(getTeamInfo(data));
             break;
+        case "live":
+            // debugger;
+            liveGamesElement.innerHTML = "";
+            liveGamesElement.append(getLiveGames(data));
+            break;
         default:
             break;
     }
@@ -40,7 +46,9 @@ const getTeamInfo = (data) => {
     let div = document.createElement('div');
     let html = `
     <h1>${data.teams[0].name}</h1>
+    <img src="https://squiggle.com.au/${data.teams[0].logo}" alt="${data.teams[0].name}">
     <p>Since ${data.teams[0].debut}</p>
+
     `;
     // debugger;
     div.innerHTML = html;
@@ -48,7 +56,7 @@ const getTeamInfo = (data) => {
 }
 
 const getStandingsHtmlTable = (data) => {
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     let html = ``;
     html += `
     <table>
@@ -90,7 +98,29 @@ const getStandingsHtmlLi = (data) => {
 
     return html;
 }
+
+const getLiveGames = (data) => {
+    const div = document.createElement('div');
+    let html = ``;
+    data.games.forEach((e) => {
+        html += `
+        <div class="live-game">
+        <span class="live-venue">${e.timestr}</span>
+        <span class="live-score-right">${e.venue}</span><br/>
+        <span class="live-hteam">${e.hteam}</span><span class="live-score-right">${e.hgoals}.${e.hbehinds}.${e.hscore}</span><br/>
+        <span class="live-ateam">${e.ateam}</span><span class="live-score-right">${e.agoals}.${e.abehinds}.${e.ascore}</span><br/>
+        </div>
+        `
+    })
+    div.innerHTML = html;
+    return div;
+}
+
 document.addEventListener("DOMContentLoaded", () =>{
+    fetch(baseUrl + liveGames).then(responseToJSObject).then((data) => handleJSObject("live", data));
+    window.setInterval(() => {
+        fetch(baseUrl + liveGames).then(responseToJSObject).then((data) => handleJSObject("live", data))
+    }, 5000);
 
     fetch(baseUrl + pathTeam).then(responseToJSObject).then((data) => handleJSObject("team", data));
     fetch(baseUrl + pathStandings).then(responseToJSObject).then((data) => handleJSObject("standings", data));
