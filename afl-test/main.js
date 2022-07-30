@@ -34,7 +34,7 @@ const buildPage = (route, data) => {
         case "live":
             // debugger;
             liveGamesElement.innerHTML = "";
-            liveGamesElement.append(getLiveGames(data));
+            getLiveGames(data);
             break;
         default:
             break;
@@ -100,9 +100,9 @@ const getStandingsHtmlLi = (data) => {
 }
 
 const getLiveGames = (data) => {
-    const div = document.createElement('div');
-    let html = ``;
     data.games.forEach((e) => {
+        const div = document.createElement('div');
+        let html = ``;
         html += `
         <div class="live-game">
         <span class="live-venue">${e.timestr}</span>
@@ -111,9 +111,10 @@ const getLiveGames = (data) => {
         <span class="live-ateam">${e.ateam}</span><span class="live-score-right">${e.agoals}.${e.abehinds}.${e.ascore}</span><br/>
         </div>
         `
+        div.innerHTML = html;
+        liveGamesElement.append(div);
     })
-    div.innerHTML = html;
-    return div;
+
 }
 
 document.addEventListener("DOMContentLoaded", () =>{
