@@ -1,18 +1,20 @@
 table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    /* width: 600px; */
-  }
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  /* width: 600px; */
+}
 
-  td, th {
-    border: 1px solid rgb(214, 214, 214);
-    text-align: left;
-    padding: 8px;
-  }
+td, th {
+  border: 1px solid rgb(214, 214, 214);
+  text-align: left;
+  padding: 4px;
+  font-size: 1em;
+}
 
-  tr:nth-child(even) {
-    background-color: rgb(219, 219, 219);
-  }
+
+tr:nth-child(even) {
+  background-color: rgb(219, 219, 219);
+}
 
 .box{
   padding: 10px;
@@ -25,13 +27,12 @@ table {
   margin: 5px;
   padding: 2px;
   min-width: 150px;
-
-
 }
 
 .live-score-right{
   float: right;
 }
+
 
 #live-scores{
   display: flex;
@@ -54,6 +55,12 @@ table {
 #standings{
   float: left;
   width: 40%;
+}
+
+#standings tr:hover{
+  color: rgb(219, 217, 217);
+  background-color: rgb(109, 109, 109);
+
 }
 
 #team-info{

@@ -2,14 +2,16 @@ const targetElement = document.querySelector("#app");
 const standingsElement = document.querySelector("#standings");
 const teamInfoElement = document.querySelector("#team-info");
 const liveGamesElement = document.querySelector("#live-scores");
+let standingsTeams;
+let selectedTeam = 1;
 
 // 1. Base URL (+ Path)
 const baseUrl = "https://api.squiggle.com.au";
 const pathStandings = "/?q=standings";
-const pathTeam = "?q=teams;team=12";
+let pathTeam = `?q=teams;team=`;
 const liveGames = "?q=games;live=1";
-const upcomingSchedule = "?q=games;team=12;complete=!100";
-const thisYearSchedule = "?q=games;team=12;year=2022;";
+let upcomingSchedule = `?q=games;complete=!100;team=`;
+let thisYearSchedule = `?q=games;year=2022;team=`;
 
 // 2. Method (None - GET)
 // 3. Query String / Parameters (None)
@@ -113,12 +115,13 @@ const getStandingsHtmlTable = (data) => {
     <th>%</th>
     <th>Pts</th>
     </tr>`;
+    // debugger;
 
     data.standings.forEach((e, index) => {
         html += `
         <tr>
         <td>${index + 1}</td>
-        <td>${e.name}</td>
+        <td id="${e.id}" class="team-select">${e.name}</td>
         <td>${e.wins}</td>
         <td>${e.losses}</td>
         <td>${e.draws}</td>
@@ -162,12 +165,23 @@ const getLiveGames = (data) => {
 }
 
 document.addEventListener("DOMContentLoaded", () =>{
+
     fetch(baseUrl + liveGames).then(responseToJSObject).then((data) => handleJSObject("live", data));
     window.setInterval(() => {
         fetch(baseUrl + liveGames).then(responseToJSObject).then((data) => handleJSObject("live", data))
     }, 5000);
 
-    fetch(baseUrl + pathTeam).then(responseToJSObject).then((data) => handleJSObject("team", data));
-    fetch(baseUrl + thisYearSchedule).then(responseToJSObject).then((data) => handleJSObject("schedule", data));
-    fetch(baseUrl + pathStandings).then(responseToJSObject).then((data) => handleJSObject("standings", data));
+
+    fetch(baseUrl + pathStandings).then(responseToJSObject).then((data) => handleJSObject("standings", data)).then(() => {
+        standingsTeams = document.querySelectorAll(".team-select");
+        standingsTeams.forEach((e) => {
+            e.addEventListener("click", () => {
+                const teamId = e.id;
+                teamInfoElement.innerHTML = "";
+                fetch(baseUrl + pathTeam + teamId).then(responseToJSObject).then((data) => handleJSObject("team", data));
+                fetch(baseUrl + thisYearSchedule + teamId).then(responseToJSObject).then((data) => handleJSObject("schedule", data));
+            })
+        })
+    }
+    );
 });
