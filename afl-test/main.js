@@ -8,6 +8,8 @@ const baseUrl = "https://api.squiggle.com.au";
 const pathStandings = "/?q=standings";
 const pathTeam = "?q=teams;team=12";
 const liveGames = "?q=games;live=1";
+const upcomingSchedule = "?q=games;team=12;complete=!100";
+const thisYearSchedule = "?q=games;team=12;year=2022;";
 
 // 2. Method (None - GET)
 // 3. Query String / Parameters (None)
@@ -31,6 +33,9 @@ const buildPage = (route, data) => {
         case "team":
             teamInfoElement.append(getTeamInfo(data));
             break;
+        case "schedule":
+            teamInfoElement.append(getTeamSchedule(data));
+            break;
         case "live":
             // debugger;
             liveGamesElement.innerHTML = "";
@@ -43,13 +48,52 @@ const buildPage = (route, data) => {
 
 const getTeamInfo = (data) => {
 
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     let html = `
     <h1>${data.teams[0].name}</h1>
     <img src="https://squiggle.com.au/${data.teams[0].logo}" alt="${data.teams[0].name}">
     <p>Since ${data.teams[0].debut}</p>
 
     `;
+    // debugger;
+    div.innerHTML = html;
+    return div;
+}
+
+const getTeamSchedule = (data) => {
+
+    const div = document.createElement('div');
+    let html = `<p>Up coming schedule</p>`;
+    html += `
+    <table>
+    <tr>
+    <th>Round</th>
+    <th>Home Team</th>
+    <th>Home Score</th>
+    <th>Away Team</th>
+    <th>Away Score</th>
+    <th>Venue</th>
+    <th>Date</th>
+    </tr>`;
+    data.games.forEach((e, index) => {
+        html += `
+        <tr>
+            <td>${e.round}</td>
+            <td>${e.hteam}</td>
+        `;
+        if(e.complete === 100){html += `<td>${e.hgoals}.${e.hbehinds}.${e.hscore}</td>`}
+        else{html += `<td>N/A</td>`}
+        html += `
+            <td>${e.ateam}</td>
+        `;
+        if(e.complete === 100){html += `<td>${e.hgoals}.${e.hbehinds}.${e.hscore}</td>`}
+        else{html += `<td>N/A</td>`}
+        html += `
+            <td>${e.venue}</td>
+            <td>${e.date}</td>
+        </tr>
+        `;
+    })
     // debugger;
     div.innerHTML = html;
     return div;
@@ -70,7 +114,7 @@ const getStandingsHtmlTable = (data) => {
     <th>Pts</th>
     </tr>`;
 
-    data.standings.forEach(function callback(e, index) {
+    data.standings.forEach((e, index) => {
         html += `
         <tr>
         <td>${index + 1}</td>
@@ -91,7 +135,7 @@ const getStandingsHtmlTable = (data) => {
 const getStandingsHtmlLi = (data) => {
     let html = ``;
     html += `<ul>`;
-    data.standings.forEach(function callback(e, index) {
+    data.standings.forEach((e, index) => {
         html += `<li>${index + 1} - ${e.name}</li>`;
     });
     html += `</ul>`;
@@ -124,5 +168,6 @@ document.addEventListener("DOMContentLoaded", () =>{
     }, 5000);
 
     fetch(baseUrl + pathTeam).then(responseToJSObject).then((data) => handleJSObject("team", data));
+    fetch(baseUrl + thisYearSchedule).then(responseToJSObject).then((data) => handleJSObject("schedule", data));
     fetch(baseUrl + pathStandings).then(responseToJSObject).then((data) => handleJSObject("standings", data));
 });
