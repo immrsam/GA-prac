@@ -1,0 +1,5 @@
+react
+npm
+parcel
+
+all in terminal not text editor
