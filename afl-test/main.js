@@ -88,7 +88,7 @@ const getTeamSchedule = (data) => {
         html += `
             <td>${e.ateam}</td>
         `;
-        if(e.complete === 100){html += `<td>${e.hgoals}.${e.hbehinds}.${e.hscore}</td>`}
+        if(e.complete === 100){html += `<td>${e.agoals}.${e.abehinds}.${e.ascore}</td>`}
         else{html += `<td>N/A</td>`}
         html += `
             <td>${e.venue}</td>

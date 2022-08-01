@@ -2,4 +2,6 @@ react
 npm
 parcel
 
+superbase or firebase for databases
+
 all in terminal not text editor
